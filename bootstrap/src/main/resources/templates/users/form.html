@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:replace="~{fragments/header :: header}"></div>
+<h3 th:text="${userModel.title}"></h3>
+<form action="/users" th:action="@{/users}" th:object="${userModel.user}" method="post">
+    <input type="hidden" name="id" th:value="*{id}">
+    <label>
+        用户名:<input type="text" name="name" th:value="*{name}">
+    </label>
+    <label>
+        邮箱:<input type="text" name="email" th:value="*{email}">
+    </label>
+    <input type="submit" value="提交">
+</form>
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+</body>
+</html>
