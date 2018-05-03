@@ -1,0 +1,58 @@
+
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://192.168.1.87:3306/myblog?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8
+    username: root
+    password: Yt917355+
+    druid:
+     initial-size: 10
+     max-active: 100
+     min-idle: 10
+     max-wait: 60000
+     pool-prepared-statements: true
+     max-pool-prepared-statement-per-connection-size: 20
+     time-between-eviction-runs-millis: 60000
+     min-evictable-idle-time-millis: 300000
+     validation-query: SELECT 1 FROM DUAL
+     test-while-idle: true
+     test-on-borrow: false
+     test-on-return: false
+     stat-view-servlet:
+       enabled: true
+       url-pattern: /druid/*
+       login-username: ytkj2017
+       login-password: ytkj2017!+
+     filter:
+       stat:
+         log-slow-sql: true
+         slow-sql-millis: 1000
+         merge-sql: true
+       wall:
+         config:
+           multi-statement-allow: true
+  servlet:
+    multipart:
+      #单个文件大小
+      max-file-size: 20MB
+      #单次请求总文件大小
+      max-request-size: 200MB
+
+  #thymeleaf:
+    #cache: false
+
+blog:
+  config:
+    version: v1.0
+    enableCdn: true
+
+mybatis:
+  #指定别名
+  type-aliases-package: cn.maolin.myblog.entity
+  #在javaconfig文件中配置mapperscan之后依然需要以下配置(不会和普通方式那样去自动寻找)
+  mapper-locations: classpath:/mapper/*Mapper.xml
+
+logging:
+  config: classpath:logging-config.xml
+

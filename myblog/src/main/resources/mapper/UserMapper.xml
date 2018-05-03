@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.maolin.myblog.mapper.UsersMapper">
+
+    <resultMap id="BaseResultMap" type="Users">
+        <id column="uid" jdbcType="INTEGER" property="uid" />
+        <result column="username" jdbcType="VARCHAR" property="username" />
+        <result column="password" jdbcType="VARCHAR" property="password" />
+        <result column="email" jdbcType="VARCHAR" property="email" />
+        <result column="home_url" jdbcType="VARCHAR" property="homeUrl" />
+        <result column="screen_name" jdbcType="VARCHAR" property="screenName" />
+        <result column="created" jdbcType="INTEGER" property="created" />
+        <result column="activated" jdbcType="INTEGER" property="activated" />
+        <result column="logged" jdbcType="INTEGER" property="logged" />
+        <result column="group_name" jdbcType="VARCHAR" property="groupName" />
+    </resultMap>
+    <!--根据主键查找用户-->
+    <select id="selectById" resultMap="BaseResultMap" >
+        SELECT uid,username,password,email,home_url,screen_name,created,activated,logged,group_name
+        FROM t_users WHERE uid = #{uid}
+    </select>
+    <!--根据用户名查找用户-->
+    <select id="selectByUserName" resultMap="BaseResultMap">
+        SELECT uid,username,password,email,home_url,screen_name,created,activated,logged,group_name
+        FROM t_users WHERE username = #{username}
+    </select>
+
+    
+</mapper>

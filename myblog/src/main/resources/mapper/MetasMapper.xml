@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.maolin.myblog.mapper.MetasMapper">
+    <resultMap id="BaseResultMap" type="Metas">
+        <id column="mid" jdbcType="INTEGER" property="mid"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="slug" jdbcType="VARCHAR" property="slug"/>
+        <result column="type" jdbcType="VARCHAR" property="type"/>
+        <result column="description" jdbcType="VARCHAR" property="description"/>
+        <result column="sort" jdbcType="TINYINT" property="sort"/>
+        <result column="parent" jdbcType="INTEGER" property="parent"/>
+    </resultMap>
+    <select id="selectMetasByType" resultMap="BaseResultMap">
+        SELECT `mid`,`name`,slug,`type`,description,sort,parent FROM t_metas WHERE `type`=#{type} ORDER BY sort DESC,`mid` DESC
+    </select>
+    <select id="selectMetasByTypeAndName" resultMap="BaseResultMap">
+        SELECT `mid`,`name`,slug,`type`,description,sort,parent FROM t_metas WHERE `name`=#{name} AND `type`=#{type}
+    </select>
+    <select id="selectMetasByMid" resultMap="BaseResultMap">
+        SELECT `mid`,`name`,slug,`type`,description,sort,parent FROM t_metas WHERE mid=#{mid}
+    </select>
+    <insert id="insert" parameterType="Metas">
+        INSERT INTO t_metas(`name`,slug,`type`,description,sort,parent)
+        VALUES
+        (#{name,jdbcType=VARCHAR},#{slug,jdbcType=VARCHAR},#{type,jdbcType=VARCHAR},#{description,jdbcType=VARCHAR},#{sort,jdbcType=TINYINT},#{parent,jdbcType=INTEGER})
+        <selectKey resultType="java.lang.Integer" keyColumn="mid" keyProperty="mid" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+    <update id="update">
+        UPDATE t_metas SET `name`=#{name} WHERE `mid`=#{mid}
+    </update>
+    <delete id="deleteByMid">
+        DELETE FROM t_metas WHERE `mid`=#{mid}
+    </delete>
+    <!--根据type查询分类统计数-->
+    <select id="countMetas" resultType="long">
+        SELECT COUNT(*) FROM t_metas WHERE `type`=#{type}
+    </select>
+    <resultMap id="MetasWithCount" type="Metas" extends="BaseResultMap">
+        <result column="count" jdbcType="INTEGER" property="count"/>
+    </resultMap>
+    <!--
+    select a.*, count(b.cid) as count
+    from t_metas a
+    left join `t_relationships` b on a.mid = b.mid
+    where a.type = 'category'
+    group by a.mid
+    order by count desc, a.mid desc
+    limit 10
+    -->
+    <select id="selectRecentMetasWithCount" resultMap="MetasWithCount">
+        SELECT m.`mid`,m.`name`,m.slug,m.`type`,m.description,m.sort,m.parent,COUNT(r.`mid`) AS `count`
+        FROM t_metas AS m
+        LEFT JOIN t_relationships AS r ON m.`mid` = r.`mid`
+        WHERE m.`type` = #{type}
+        GROUP BY m.`mid`
+        ORDER BY `count` DESC ,m.`mid` DESC
+        LIMIT #{limit}
+    </select>
+    <select id="selectRandomMetasWithCount" resultMap="MetasWithCount">
+
+    </select>
+</mapper>

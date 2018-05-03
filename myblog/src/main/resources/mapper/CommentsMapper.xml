@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.maolin.myblog.mapper.CommentsMapper">
+
+    <resultMap id="BaseResultMap" type="Comments">
+        <id column="coid" jdbcType="INTEGER" property="coid" />
+        <result column="cid" jdbcType="INTEGER" property="cid" />
+        <result column="created" jdbcType="INTEGER" property="created" />
+        <result column="author" jdbcType="VARCHAR" property="author" />
+        <result column="author_id" jdbcType="INTEGER" property="authorId" />
+        <result column="owner_id" jdbcType="INTEGER" property="ownerId" />
+        <result column="mail" jdbcType="VARCHAR" property="mail" />
+        <result column="url" jdbcType="VARCHAR" property="url" />
+        <result column="ip" jdbcType="VARCHAR" property="ip" />
+        <result column="agent" jdbcType="VARCHAR" property="agent" />
+        <result column="type" jdbcType="VARCHAR" property="type" />
+        <result column="status" jdbcType="VARCHAR" property="status" />
+        <result column="parent" jdbcType="INTEGER" property="parent" />
+    </resultMap>
+    <!--查询所有评论-->
+    <select id="selectComments" resultMap="BaseResultMap">
+        SELECT coid,cid,created,author,author_id,owner_id,mail,url,ip,agent,content,`type`,`status`,parent FROM t_comments ORDER BY created DESC
+    </select>
+    <select id="countComments" resultType="long">
+        SELECT COUNT(*) FROM t_comments
+    </select>
+
+    <delete id="deleteByCid">
+        DELETE FROM t_comments WHERE cid=#{cid}
+    </delete>
+
+    <select id="selectCommentsByCoid" resultMap="BaseResultMap">
+        SELECT coid,cid,created,author,author_id,owner_id,mail,url,ip,agent,content,`type`,`status`,parent FROM t_comments WHERE coid=#{coid}
+    </select>
+
+
+</mapper>
