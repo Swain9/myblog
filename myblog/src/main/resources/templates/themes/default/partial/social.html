@@ -1,0 +1,15 @@
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+<th:block th:fragment="social">
+    <div class="social-list">
+        <a class="social weibo" target="blank" href="http://weibo.com/${theme_option('social_weibo')}">微博</a>
+        <a class="social rss" target="blank" href="/feed">RSS</a>
+        <a class="social github" target="blank"
+           href="https://github.com/${theme_option('social_github')}">Github</a>
+    </div>
+</th:block>
+
+</body>
+</html>

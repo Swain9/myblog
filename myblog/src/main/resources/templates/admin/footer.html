@@ -1,0 +1,24 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>公共对象</title>
+</head>
+<body>
+
+<th:block th:fragment="foot">
+
+    <footer class="footer text-right">
+        2017 © <a href="https://github.com/biezhi" target="_blank">Tale</a>.
+    </footer>
+    </div>
+    </div>
+    <script th:replace="~{comm/common :: common('footer')}"></script>
+    <script th:src="@{/js/jquery.app.js(v=${version})}"></script>
+    <script th:src="@{/js/base.js(v=${version})}"></script>
+
+</th:block>
+
+
+</body>
+</html>
+
