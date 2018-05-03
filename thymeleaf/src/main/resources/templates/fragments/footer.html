@@ -6,8 +6,49 @@
     <title>Title</title>
 </head>
 <body>
-<div th:fragment="footer">
-    <a href="http://www.baidu.com/">百毒</a>
+<div th:fragment="footer(type,cdn)">
+    <div th:if="${cdn}=='nihao'">
+        <div th:switch="${type}">
+            <div th:case="'百度'">
+                <a href="http://www.baidu.com/">百毒</a>
+            </div>
+            <div th:case="'腾讯'">
+                <a href="http://www.qq.com/">血轮眼</a>
+            </div>
+        </div>
+    </div>
+    <div th:unless="${cdn} == 'nihao'">
+        <a href="http://www.qq.com/">没有CDN</a>
+    </div>
 </div>
+
+<div th:fragment="install_head_cdn">
+    <link href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+    <link href="//cdn.bootcss.com/limonte-sweetalert2/6.4.1/sweetalert2.min.css" rel="stylesheet">
+</div>
+<div th:fragment="install_head">
+    <link href="/static/admin/plugins/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+    <link href="/static/admin/plugins/limonte-sweetalert2/6.4.1/sweetalert2.min.css" rel="stylesheet">
+</div>
+
+<th:block th:fragment="common(type,cdn)">
+    <th:block th:if="${cdn} == 'true'">
+        <th:block th:switch="${type}">
+            <th:block th:case="'install_head'">
+                <link href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+                <link href="//cdn.bootcss.com/limonte-sweetalert2/6.4.1/sweetalert2.min.css" rel="stylesheet">
+            </th:block>
+        </th:block>
+    </th:block>
+    <th:block th:unless="${cdn} == 'true'">
+        <th:block th:switch="${type}">
+            <th:block th:case="'install_head'">
+                <link href="/static/admin/plugins/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+                <link href="/static/admin/plugins/limonte-sweetalert2/6.4.1/sweetalert2.min.css" rel="stylesheet">
+            </th:block>
+        </th:block>
+    </th:block>
+
+</th:block>
 </body>
 </html>

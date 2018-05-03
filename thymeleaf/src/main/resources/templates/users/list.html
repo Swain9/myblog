@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link th:include="~{fragments/footer :: common('install_head','false')}">
 </head>
 <body>
 <div th:replace="~{fragments/header :: header}"></div>
@@ -27,6 +28,10 @@
     </tr>
     </tbody>
 </table>
-<div th:replace="~{fragments/footer :: footer}"></div>
+<div th:include="~{fragments/footer :: footer('百度','nihao1')}"></div>
+<th:block th:insert="~{fragments/footer :: common('install_head','false')}"/>
+<div th:insert="~{fragments/footer :: common('install_head','false')}"></div>
+<div th:replace="~{fragments/footer :: common('install_head','false')}"></div>
+<div th:include="~{fragments/footer :: common('install_head','false')}"></div>
 </body>
 </html>
