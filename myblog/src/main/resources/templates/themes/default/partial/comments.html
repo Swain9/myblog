@@ -70,7 +70,7 @@
                                         </span>
                                     </div>
                                     <div class="comment-content">
-                                        <span class="comment-author-at" th:text="${@site.commentAt(child.parent)}">
+                                        <span class="comment-author-at" th:utext="${@site.commentAt(child.parent)}">
 
                                         </span>
                                         <p th:text="${#myutil.article(child.content)}"></p>

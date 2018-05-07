@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>测试</title>
+</head>
+<body>
+<table>
+    <tr>
+        <td>主键</td>
+        <td>用户名</td>
+        <td>密码</td>
+        <td>邮箱</td>
+        <td>链接</td>
+        <td>显示的名称</td>
+        <td>注册日期</td>
+        <td>最后活动日期</td>
+        <td>上次登陆日期</td>
+        <td>用户组</td>
+    </tr>
+    <tr th:if="${list.size() == 0}">
+        <td colspan="10">无数据</td>
+    </tr>
+    <tr th:each="user:${list}">
+        <td th:text="${user.uid}">主键</td>
+        <td th:text="${user.username}">用户名</td>
+        <td th:text="${user.password}">密码</td>
+        <td th:text="${user.email}">邮箱</td>
+        <td th:text="${user.homeUrl}">链接</td>
+        <td th:text="${user.screenName}">显示的名称</td>
+        <td th:text="${user.created}">注册日期</td>
+        <td th:text="${user.activated}">最后活动日期</td>
+        <td th:text="${user.logged}">上次登陆日期</td>
+        <td th:text="${user.groupName}">用户组</td>
+    </tr>
+</table>
+</body>
+</html>

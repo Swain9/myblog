@@ -118,7 +118,7 @@ public class ThymeleafUtil extends AbstractDialect implements IExpressionObjectD
      * @return
      */
     public String theme_url(String sub) {
-        return  BlogUtil.THEME + sub;
+        return "/" + BlogUtil.THEME + sub;
     }
 
     /**
@@ -152,6 +152,7 @@ public class ThymeleafUtil extends AbstractDialect implements IExpressionObjectD
         }
         return "";
     }
+
     /**
      * 显示标签
      *
@@ -161,7 +162,7 @@ public class ThymeleafUtil extends AbstractDialect implements IExpressionObjectD
     public String showTags(Contents contents) throws UnsupportedEncodingException {
         String split = "";
         if (!StringUtils.isEmpty(contents.getTags())) {
-            String[]     arr  = contents.getTags().split(",");
+            String[] arr = contents.getTags().split(",");
             StringBuffer sbuf = new StringBuffer();
             for (String c : arr) {
                 sbuf.append(split).append("<a href=\"/tag/" + URLEncoder.encode(c, "UTF-8") + "\">" + c + "</a>");

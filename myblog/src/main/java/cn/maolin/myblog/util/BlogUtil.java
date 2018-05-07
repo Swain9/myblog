@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 public class BlogUtil {
 
     private static final Pattern SLUG_REGEX = Pattern.compile("^[A-Za-z0-9_-]{5,100}$", Pattern.CASE_INSENSITIVE);
-    public static final String THEME = "/themes/default";
+    public static final String THEME = "themes/default";
 
     /**
      * 判断是否是合法路径

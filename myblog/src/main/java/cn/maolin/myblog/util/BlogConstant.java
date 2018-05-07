@@ -77,7 +77,7 @@ public class BlogConstant {
      */
     public static final int MAX_FILE_SIZE = 204800;
 
-    public static final String RENDER_404 = "/comm/error_404";
+    public static final String RENDER_404 = "comm/error_404";
 
     public static final String ENV_SUPPORT_163_MUSIC = "app.support_163_music";
     public static final String ENV_SUPPORT_GIST = "app.support_gist";

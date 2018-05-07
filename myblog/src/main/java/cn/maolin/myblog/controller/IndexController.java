@@ -30,7 +30,7 @@ public class IndexController {
     /**
      * 文章页
      */
-    @GetMapping(value = {"article/{cid}", "article/{cid}.html"})
+    @GetMapping(value = {"/article/{cid}", "/article/{cid}.html"})
     public String post(@PathVariable String cid, @RequestParam(defaultValue = "1") int cp, Model model) {
         Optional<Contents> contentsOptional = contentsService.getContents(cid);
         if (!contentsOptional.isPresent()) {
