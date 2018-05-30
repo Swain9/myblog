@@ -22,6 +22,25 @@ public interface ContentsMapper {
     List<Contents> selectContentsByStatusAndType(@Param("status") String status, @Param("type") String type);
 
     /**
+     * 根据文章状态和文章类型以及登陆id查找对应的文章列表
+     *
+     * @param status 文章状态
+     * @param type   文章类型
+     * @param uid    登陆id
+     * @return List<Contents>
+     */
+    List<Contents> selectContentsByStatusAndTypeAndAuthor(@Param("status") String status, @Param("type") String type, @Param("uid") Integer uid);
+
+    /**
+     * 根据文章状态和文章类型查找已公开的文章列表
+     *
+     * @param status 文章状态
+     * @param type   文章类型
+     * @return List<Contents>
+     */
+    List<Contents> selectContentsByStatusAndTypeWithNoLogin(@Param("status") String status, @Param("type") String type);
+
+    /**
      * 根据文章状态和文章类型来随机获取文章
      *
      * @param status 文章状态
@@ -98,6 +117,7 @@ public interface ContentsMapper {
 
     /**
      * 查询下一篇文章
+     *
      * @param contents
      * @return
      */
@@ -105,6 +125,7 @@ public interface ContentsMapper {
 
     /**
      * 查询上一篇文章
+     *
      * @param contents
      * @return
      */
@@ -112,6 +133,7 @@ public interface ContentsMapper {
 
     /**
      * 更新点击率
+     *
      * @param temp
      * @return
      */

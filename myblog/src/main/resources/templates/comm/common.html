@@ -5,6 +5,22 @@
     <title>公共对象</title>
 </head>
 <body>
+<th:block th:fragment="pageNav(pageInfo, prevText, nextText, prefix)">
+<ol class="page-navigator">
+    <li th:if="${pageInfo.hasPreviousPage}" class="prev">
+        <!--@{/admin/article/{cid}(cid=${post.cid})}-->
+        <a th:href="@{/{prefix}/{prePage}(prefix=${prefix},prePage=${pageInfo.prePage})}" th:text="${prevText}"></a>
+    </li>
+
+    <li th:each="navIndex : ${pageInfo.navigatepageNums}" th:class="${navIndex == pageInfo.pageNum}?'current':_">
+        <a th:href="@{'/page/'+${navIndex}}" th:text="${navIndex}"></a>
+    </li>
+
+    <li th:if="${pageInfo.hasNextPage}" class="next">
+        <a th:href="@{/{prefix}/{nextPage}(prefix=${prefix},nextPage=${pageInfo.nextPage})}" th:text="${nextText}"></a>
+    </li>
+</ol>
+</th:block>
 
 <th:block th:fragment="pageAdminNav(pageInfo)">
 <div class="clearfix"></div>

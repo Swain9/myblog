@@ -8,6 +8,7 @@ public interface Types {
     String ARTICLE = "post";
     String PUBLISH = "publish";
     String PAGE = "page";
+    //草稿
     String DRAFT = "draft";
     String IMAGE = "image";
     String FILE = "file";

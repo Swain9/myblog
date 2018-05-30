@@ -1,6 +1,7 @@
 package cn.maolin.myblog.service.impl;
 
 import cn.maolin.myblog.entity.Contents;
+import cn.maolin.myblog.entity.Users;
 import cn.maolin.myblog.exception.TipException;
 import cn.maolin.myblog.mapper.CommentsMapper;
 import cn.maolin.myblog.mapper.ContentsMapper;
@@ -184,7 +185,21 @@ public class ContentsServiceImpl implements ContentsService {
      * @param temp
      */
     @Override
+    @Transactional(rollbackFor = RuntimeException.class)
     public void updateArticleHits(Contents temp) {
         contentsMapper.updateHits(temp);
+    }
+
+    @Override
+    public List<Contents> selectIndexContentsByPageWithLoginType(int page, int limit, Users user) {
+        //new Contents().where("type", Types.ARTICLE).and("status", Types.PUBLISH).page(page, limit, "created desc");
+        PageHelper.startPage(page, limit);
+        if (user != null && user.getUid() == 1) {
+            return contentsMapper.selectContentsByStatusAndType(Types.PUBLISH,Types.ARTICLE);
+        }
+        if(user != null) {
+            return contentsMapper.selectContentsByStatusAndTypeAndAuthor(Types.PUBLISH,Types.ARTICLE, user.getUid());
+        }
+        return contentsMapper.selectContentsByStatusAndTypeWithNoLogin(Types.PUBLISH,Types.ARTICLE);
     }
 }

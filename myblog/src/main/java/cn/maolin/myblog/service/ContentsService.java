@@ -1,6 +1,7 @@
 package cn.maolin.myblog.service;
 
 import cn.maolin.myblog.entity.Contents;
+import cn.maolin.myblog.entity.Users;
 
 import java.util.List;
 import java.util.Optional;
@@ -53,4 +54,13 @@ public interface ContentsService {
      * @param temp
      */
     void updateArticleHits(Contents temp);
+
+    /**
+     * 首页分页文章（根据是否登陆查询出不同的文章）
+     * @param page 当前页
+     * @param limit 查询条数
+     * @param user 登陆用户
+     * @return List<Contents>
+     */
+    List<Contents> selectIndexContentsByPageWithLoginType(int page, int limit, Users user);
 }

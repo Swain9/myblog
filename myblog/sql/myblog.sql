@@ -54,6 +54,9 @@ CREATE TABLE t_contents (
     allow_feed TINYINT(1) COMMENT '是否允许出现在聚合中'
 )  ENGINE=INNODB DEFAULT CHARSET=UTF8 COMMENT='文章内容';
 
+ALTER TABLE `myblog`.`t_contents`
+    ADD COLUMN `allow_see` TINYINT(1) NULL DEFAULT 1 AFTER `allow_comment`;
+
 -- 表：t_logs
 DROP TABLE IF EXISTS t_logs;
 CREATE TABLE t_logs (

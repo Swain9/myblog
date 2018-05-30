@@ -1,36 +1,36 @@
-#include('./partial/header.html',{home_page:1})
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:insert="~{themes/default/partial/header :: header('首页','我的blog','个人blog')}"/>
 <div class="main-content index-page clearfix">
     <div class="post-lists">
         <div class="post-lists-body">
-            #for(article : articles(12).rows)
-            <div class="post-list-item">
+            <div th:each="article : ${articles.list}" class="post-list-item">
                 <div class="post-list-item-container">
-                    <div class="item-thumb bg-deepgrey" style="background-image:url(${show_thumb(article)});"></div>
-                    <a href="${permalink()}">
+                    <div class="item-thumb bg-deepgrey" th:style="'background-image:url('+${@site.show_thumb(article)}+');'"></div>
+                    <a th:href="${@site.permalink(article)}">
                         <div class="item-desc">
-                            <p>${intro(75)}...</p>
+                            <p th:text="${@site.intro(article,75)}"></p>
                         </div>
                     </a>
                     <div class="item-slant reverse-slant bg-deepgrey"></div>
                     <div class="item-slant"></div>
                     <div class="item-label">
-                        <div class="item-title"><a href="${permalink()}">${title()}</a>
+                        <div class="item-title"><a th:href="${@site.permalink(article)}" th:text="${@site.title(article)}"></a>
                         </div>
                         <div class="item-meta clearfix">
-                            <div class="item-meta-ico ${show_icon()}"
-                                 style="background: url(/static/themes/default/img/bg-ico.png) no-repeat;background-size: 40px auto;"></div>
-                            <div class="item-meta-cat">
-                                ${show_categories()}
+                            <div th:class="'item-meta-ico '+${@site.show_icon(article)}"
+                                 style="background: url(/themes/default/img/bg-ico.png) no-repeat;background-size: 40px auto;"></div>
+                            <div class="item-meta-cat" th:utext="${@site.show_categories(article)}">
+
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            #end
         </div>
     </div>
     <div class="lists-navigator clearfix">
-        #call pageNav(articles(12),'←','→','page')
+        <th:block th:insert="~{comm/common :: pageNav(${articles},'←','→','page')}" />
     </div>
 </div>
-#include('./partial/footer.html')
+<th:block  th:insert="~{themes/default/partial/footer :: footer}"></th:block>

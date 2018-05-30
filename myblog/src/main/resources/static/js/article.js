@@ -261,6 +261,18 @@ function allow_comment(obj) {
     }
 }
 
+function allow_see(obj) {
+    var this_ = $(obj);
+    var on = this_.attr('on');
+    if (on == 'true') {
+        this_.attr('on', 'false');
+        $('#allowSee').val('false');
+    } else {
+        this_.attr('on', 'true');
+        $('#allowSee').val('true');
+    }
+}
+
 function allow_ping(obj) {
     var this_ = $(obj);
     var on = this_.attr('on');

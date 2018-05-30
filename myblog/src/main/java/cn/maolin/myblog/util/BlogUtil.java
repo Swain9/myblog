@@ -86,6 +86,18 @@ public class BlogUtil {
         }
         return content;
     }
+    /**
+     * 提取html中的文字
+     *
+     * @param html
+     * @return
+     */
+    public static String htmlToText(String html) {
+        if (!StringUtils.isEmpty(html)) {
+            return html.replaceAll("(?s)<[^>]*>(\\s*<[^>]*>)*", " ");
+        }
+        return "";
+    }
 
     static class LinkAttributeProvider implements AttributeProvider {
         @Override
@@ -94,5 +106,30 @@ public class BlogUtil {
                 attributes.put("target", "_blank");
             }
         }
+    }
+
+    private static final Pattern SRC_PATTERN = Pattern.compile("src\\s*=\\s*\'?\"?(.*?)(\'|\"|>|\\s+)");
+    /**
+     * 获取文章第一张图片
+     *
+     * @return
+     */
+    public static String show_thumb(String content) {
+        content = mdToHtml(content);
+        if (content.contains("<img")) {
+            String  img       = "";
+            String  regEx_img = "<img.*src\\s*=\\s*(.*?)[^>]*?>";
+            Pattern p_image   = Pattern.compile(regEx_img, Pattern.CASE_INSENSITIVE);
+            Matcher m_image   = p_image.matcher(content);
+            if (m_image.find()) {
+                img = img + "," + m_image.group();
+                // //匹配src
+                Matcher m = SRC_PATTERN.matcher(img);
+                if (m.find()) {
+                    return m.group(1);
+                }
+            }
+        }
+        return "";
     }
 }

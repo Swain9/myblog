@@ -104,6 +104,12 @@ public class Contents implements Serializable {
     private Boolean allowComment;
 
     /**
+     * 是否可见
+     * t_contents.allow_see
+     */
+    private Boolean allowSee;
+
+    /**
      * 是否允许ping
      * t_contents.allow_ping
      */

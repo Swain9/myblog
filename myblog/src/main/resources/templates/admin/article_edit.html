@@ -90,6 +90,7 @@
             <input type="hidden" name="cid" th:value="${contents != null && contents.cid!= null}?${contents.cid}:''" id="cid"/>
             <input type="hidden" name="status" th:value="${contents != null && contents.status != null}?${contents.status}:'draft'" id="status"/>
             <input type="hidden" name="allowComment" th:value="${contents != null && contents.allowComment != null}?${contents.allowComment}:'true'" id="allowComment"/>
+            <input type="hidden" name="allowSee" th:value="${contents != null && contents.allowSee != null}?${contents.allowSee}:'true'" id="allowSee"/>
             <input type="hidden" name="allowPing" th:value="${contents != null && contents.allowPing != null}?${contents.allowPing}:'true'" id="allowPing"/>
             <input type="hidden" name="allowFeed" th:value="${contents != null && contents.allowFeed != null}?${contents.allowFeed}:'true'" id="allowFeed"/>
             <input type="hidden" name="content" id="content-editor"/>
@@ -135,7 +136,7 @@
                 </div>
             </div>
 
-            <div class="form-group col-md-3 col-sm-4">
+            <div class="form-group col-md-3 col-sm-3">
                 <label class="col-sm-4">开启评论</label>
                 <div class="col-sm-8">
                     <div th:class="'toggle toggle-success allow-'+(${contents != null && contents.allowComment != null}?${contents.allowComment}:'true')"
@@ -143,25 +144,33 @@
                 </div>
             </div>
 
-            <div class="form-group col-md-3 col-sm-4">
-                <label class="col-sm-4">允许Ping</label>
+            <div class="form-group col-md-3 col-sm-3">
+                <label class="col-sm-4">文章公开</label>
                 <div class="col-sm-8">
+                    <div th:class="'toggle toggle-success allow-'+(${contents != null && contents.allowSee != null}?${contents.allowSee}:'true')"
+                         onclick="allow_see(this);" th:on="${contents != null && contents.allowSee != null}?${contents.allowSee}:'true'"></div>
+                </div>
+            </div>
+
+            <div class="form-group col-md-2 col-sm-3">
+                <label class="col-sm-6">允许Ping</label>
+                <div class="col-sm-6">
                     <div th:class="'toggle toggle-success allow-'+(${contents != null && contents.allowPing != null}?${contents.allowPing}:'true')"
                          onclick="allow_ping(this);" th:on="${contents != null && contents.allowPing != null}?${contents.allowPing}:'true'"></div>
                 </div>
             </div>
 
-            <div class="form-group col-md-3 col-sm-4">
-                <label class="col-sm-4">允许订阅</label>
-                <div class="col-sm-8">
+            <div class="form-group col-md-2 col-sm-3">
+                <label class="col-sm-6">允许订阅</label>
+                <div class="col-sm-6">
                     <div th:class="'toggle toggle-success allow-'+(${contents != null && contents.allowFeed != null}?${contents.allowFeed}:'true')"
                          onclick="allow_feed(this);" th:on="${contents != null && contents.allowFeed != null}?${contents.allowFeed}:'true'"></div>
                 </div>
             </div>
 
-            <div class="form-group col-md-3">
-                <label class="col-sm-5">添加缩略图</label>
-                <div class="col-sm-7">
+            <div class="form-group col-md-2">
+                <label class="col-sm-6">添加缩略图</label>
+                <div class="col-sm-6">
                     <div id="thumb-toggle" class="toggle toggle-success" on="false"
                          th:thumb_url="${contents != null && contents.thumbImg!=null}?${contents.thumbImg}:''" onclick="add_thumbimg(this);"></div>
                 </div>

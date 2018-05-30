@@ -18,6 +18,7 @@
         <result column="hits" jdbcType="INTEGER" property="hits" />
         <result column="comments_num" jdbcType="INTEGER" property="commentsNum" />
         <result column="allow_comment" jdbcType="BIT" property="allowComment" />
+        <result column="allow_see" jdbcType="BIT" property="allowSee" />
         <result column="allow_ping" jdbcType="BIT" property="allowPing" />
         <result column="allow_feed" jdbcType="BIT" property="allowFeed" />
     </resultMap>
@@ -26,12 +27,12 @@
         <if test="slug != null and slug != ''">
             slug,
         </if>
-        thumb_img,created,modified,content,author_id,`type`,`status`,fmt_type,tags,categories,hits,comments_num,allow_comment,allow_ping,allow_feed)
+        thumb_img,created,modified,content,author_id,`type`,`status`,fmt_type,tags,categories,hits,comments_num,allow_comment,allow_see,allow_ping,allow_feed)
         VALUES (#{title,jdbcType=VARCHAR},
         <if test="slug != null and slug != ''">
             #{slug,jdbcType=VARCHAR},
         </if>
-        #{thumbImg,jdbcType=VARCHAR},#{created,jdbcType=INTEGER}, #{modified,jdbcType=INTEGER}, #{content,jdbcType=LONGVARCHAR}, #{authorId,jdbcType=INTEGER},#{type,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{fmtType,jdbcType=VARCHAR},#{tags,jdbcType=VARCHAR}, #{categories,jdbcType=VARCHAR}, #{hits,jdbcType=INTEGER},#{commentsNum,jdbcType=INTEGER}, #{allowComment,jdbcType=BIT}, #{allowPing,jdbcType=BIT},#{allowFeed,jdbcType=BIT})
+        #{thumbImg,jdbcType=VARCHAR},#{created,jdbcType=INTEGER}, #{modified,jdbcType=INTEGER}, #{content,jdbcType=LONGVARCHAR}, #{authorId,jdbcType=INTEGER},#{type,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{fmtType,jdbcType=VARCHAR},#{tags,jdbcType=VARCHAR}, #{categories,jdbcType=VARCHAR}, #{hits,jdbcType=INTEGER},#{commentsNum,jdbcType=INTEGER}, #{allowComment,jdbcType=BIT}, #{allowSee,jdbcType=BIT}, #{allowPing,jdbcType=BIT},#{allowFeed,jdbcType=BIT})
         <selectKey resultType="java.lang.Integer" keyColumn="cid" keyProperty="cid" order="AFTER">
             SELECT LAST_INSERT_ID()
         </selectKey>
@@ -89,6 +90,9 @@
             <if test="allowComment != null">
                 allow_comment = #{allowComment,jdbcType=BIT},
             </if>
+            <if test="allowSee != null">
+                allow_see = #{allowSee,jdbcType=BIT},
+            </if>
             <if test="allowPing != null">
                 allow_ping = #{allowPing,jdbcType=BIT},
             </if>
@@ -105,21 +109,35 @@
         UPDATE t_contents SET hits = #{hits,jdbcType=INTEGER} WHERE cid = #{cid,jdbcType=INTEGER}
     </update>
     <select id="selectContentsByPage" resultMap="BaseResultMap">
-        SELECT cid,title,slug,thumb_img,created,modified,content,author_id,`type`,`status`,fmt_type,tags,categories,hits,comments_num,allow_comment,allow_ping,allow_feed
+        SELECT cid,title,slug,thumb_img,created,modified,content,author_id,`type`,`status`,fmt_type,tags,categories,hits,comments_num,allow_comment,allow_see,allow_ping,allow_feed
         FROM t_contents
         WHERE `type`=#{type}
         ORDER BY created DESC
     </select>
     <!--根据文章状态和文章类型查找对应的文章列表-->
     <select id="selectContentsByStatusAndType" resultMap="BaseResultMap">
-        SELECT cid,title,slug,thumb_img,created,modified,content,author_id,`type`,`status`,fmt_type,tags,categories,hits,comments_num,allow_comment,allow_ping,allow_feed
+        SELECT cid,title,slug,thumb_img,created,modified,content,author_id,`type`,`status`,fmt_type,tags,categories,hits,comments_num,allow_comment,allow_see,allow_ping,allow_feed
         FROM t_contents
         WHERE `type`=#{type} AND `status`=#{status}
         ORDER BY created DESC
     </select>
+    <!--根据文章状态和文章类型以及登陆id查找对应的文章列表-->
+    <select id="selectContentsByStatusAndTypeAndAuthor" resultMap="BaseResultMap">
+        SELECT cid,title,slug,thumb_img,created,modified,content,author_id,`type`,`status`,fmt_type,tags,categories,hits,comments_num,allow_comment,allow_see,allow_ping,allow_feed
+        FROM t_contents
+        WHERE `type`=#{type} AND `status`=#{status} AND author_id=#{uid}
+        ORDER BY created DESC
+    </select>
+    <!--根据文章状态和文章类型查找已公开的文章列表-->
+    <select id="selectContentsByStatusAndTypeWithNoLogin" resultMap="BaseResultMap">
+        SELECT cid,title,slug,thumb_img,created,modified,content,author_id,`type`,`status`,fmt_type,tags,categories,hits,comments_num,allow_comment,allow_see,allow_ping,allow_feed
+        FROM t_contents
+        WHERE `type`=#{type} AND `status`=#{status} AND allow_see IS TRUE
+        ORDER BY created DESC
+    </select>
     <!--order by rand()-->
     <select id="selectRandomContentsByStatusAndType" resultMap="BaseResultMap">
-        SELECT cid,title,slug,thumb_img,created,modified,content,author_id,`type`,`status`,fmt_type,tags,categories,hits,comments_num,allow_comment,allow_ping,allow_feed
+        SELECT cid,title,slug,thumb_img,created,modified,content,author_id,`type`,`status`,fmt_type,tags,categories,hits,comments_num,allow_comment,allow_see,allow_ping,allow_feed
         FROM t_contents
         WHERE `type`=#{type} AND `status`=#{status}
         ORDER BY rand()
@@ -133,18 +151,18 @@
         SELECT COUNT(*) FROM t_contents WHERE slug=#{slug} AND `type`=#{type}
     </select>
     <select id="selectContentsByCid" resultMap="BaseResultMap">
-        SELECT cid,title,slug,thumb_img,created,modified,content,author_id,`type`,`status`,fmt_type,tags,categories,hits,comments_num,allow_comment,allow_ping,allow_feed
+        SELECT cid,title,slug,thumb_img,created,modified,content,author_id,`type`,`status`,fmt_type,tags,categories,hits,comments_num,allow_comment,allow_see,allow_ping,allow_feed
         FROM t_contents WHERE cid=#{cid}
     </select>
     <select id="selectContentsBySlug" resultMap="BaseResultMap">
-        SELECT cid,title,slug,thumb_img,created,modified,content,author_id,`type`,`status`,fmt_type,tags,categories,hits,comments_num,allow_comment,allow_ping,allow_feed
+        SELECT cid,title,slug,thumb_img,created,modified,content,author_id,`type`,`status`,fmt_type,tags,categories,hits,comments_num,allow_comment,allow_see,allow_ping,allow_feed
         FROM t_contents WHERE slug=#{slug}
     </select>
     <select id="selectNextContent" resultMap="BaseResultMap">
-        SELECT cid,title,slug,thumb_img,created,modified,content,author_id,`type`,`status`,fmt_type,tags,categories,hits,comments_num,allow_comment,allow_ping,allow_feed FROM t_contents WHERE `type` = #{type} AND status = #{status} AND created > #{created} ORDER BY created ASC LIMIT 1
+        SELECT cid,title,slug,thumb_img,created,modified,content,author_id,`type`,`status`,fmt_type,tags,categories,hits,comments_num,allow_comment,allow_see,allow_ping,allow_feed FROM t_contents WHERE `type` = #{type} AND status = #{status} AND created > #{created} ORDER BY created ASC LIMIT 1
     </select>
     <select id="selectPrevContent" resultMap="BaseResultMap">
-        SELECT cid,title,slug,thumb_img,created,modified,content,author_id,`type`,`status`,fmt_type,tags,categories,hits,comments_num,allow_comment,allow_ping,allow_feed FROM t_contents WHERE `type` = #{type} AND status = #{status} AND created &lt; #{created} ORDER BY created DESC LIMIT 1
+        SELECT cid,title,slug,thumb_img,created,modified,content,author_id,`type`,`status`,fmt_type,tags,categories,hits,comments_num,allow_comment,allow_see,allow_ping,allow_feed FROM t_contents WHERE `type` = #{type} AND status = #{status} AND created &lt; #{created} ORDER BY created DESC LIMIT 1
     </select>
 
 </mapper>

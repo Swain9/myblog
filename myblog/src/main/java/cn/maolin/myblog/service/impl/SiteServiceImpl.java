@@ -68,24 +68,20 @@ public class SiteServiceImpl implements SiteService {
         if (count < 0 || count > BlogConstant.CONTENT_COUNT_MAX) {
             count = BlogConstant.CONTENT_COUNT_MAX;
         }
+        List<Contents> list = null;
         // 最新文章
         if (Types.RECENT_ARTICLE.equals(type)) {
             PageHelper.startPage(0, count);
             //
-            List<Contents> list = contentsMapper.selectContentsByStatusAndType(Types.PUBLISH, Types.ARTICLE);
-
-            return list;
+            list = contentsMapper.selectContentsByStatusAndType(Types.PUBLISH, Types.ARTICLE);
         }
 
         // 随机文章
         if (Types.RANDOM_ARTICLE.equals(type)) {
             PageHelper.startPage(0, count);
-            List<Contents> list = contentsMapper.selectRandomContentsByStatusAndType(Types.PUBLISH, Types.ARTICLE);
-
-            return list;
+            list = contentsMapper.selectRandomContentsByStatusAndType(Types.PUBLISH, Types.ARTICLE);
         }
-        return null;
-
+        return list;
     }
 
     /**
@@ -140,7 +136,7 @@ public class SiteServiceImpl implements SiteService {
     /**
      * 清除缓存
      *
-     * @param key
+     * @param key 缓存Map的key
      */
     @Override
     public void cleanCache(String key) {
@@ -194,8 +190,8 @@ public class SiteServiceImpl implements SiteService {
     /**
      * 查询一条评论
      *
-     * @param coid
-     * @return
+     * @param coid 评论主键
+     * @return Comments
      */
     @Override
     public Comments getComment(Integer coid) {

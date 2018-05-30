@@ -76,8 +76,14 @@ public class BlogConstant {
      * 上传文件最大20M
      */
     public static final int MAX_FILE_SIZE = 204800;
-
+    /**
+     * 404页面地址
+     */
     public static final String RENDER_404 = "comm/error_404";
+    /**
+     * 最大页码
+     */
+    public static final int MAX_PAGE = 100;
 
     public static final String ENV_SUPPORT_163_MUSIC = "app.support_163_music";
     public static final String ENV_SUPPORT_GIST = "app.support_gist";

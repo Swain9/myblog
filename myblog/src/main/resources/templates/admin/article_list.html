@@ -13,6 +13,7 @@
                 <th width="15%">发布时间</th>
                 <th>浏览量</th>
                 <th>所属分类</th>
+                <th width="8%">公开状态</th>
                 <th width="8%">发布状态</th>
                 <th>操作</th>
             </tr>
@@ -25,6 +26,10 @@
                 <td th:text="${#myutil.fmtdate(post.created, 'yyyy-MM-dd HH:mm:ss')}"></td>
                 <td th:text="${post.hits}"></td>
                 <td th:text="${post.categories}"></td>
+                <td>
+                    <span th:if="${post.allowSee}" class="label label-success">已公开</span>
+                    <span th:unless="${post.allowSee}" class="label label-danger">已关闭</span>
+                </td>
                 <td>
                     <span th:if="${post.status == 'publish'}" class="label label-success">已发布</span>
                     <span th:if="${post.status=='draft'}" class="label label-default">草稿</span>

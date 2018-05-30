@@ -4,10 +4,16 @@ import cn.maolin.myblog.entity.Comments;
 import cn.maolin.myblog.entity.Contents;
 import cn.maolin.myblog.model.dto.Types;
 import cn.maolin.myblog.service.SiteService;
+import cn.maolin.myblog.util.BlogConstant;
+import cn.maolin.myblog.util.BlogUtil;
+import cn.maolin.myblog.util.HttpContextUtils;
 import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.List;
 
 /**
@@ -44,6 +50,144 @@ public class SiteUtil {
     public String permalink(Contents contents) {
         return permalink(contents.getCid(), contents.getSlug());
     }
+
+    /**
+     * 获取文章摘要
+     *
+     * @param contents 文章
+     * @param len      长度
+     * @return
+     */
+    public String intro(Contents contents, int len) {
+        if (null != contents) {
+            return intro(contents.getContent(), len);
+        }
+        return "";
+    }
+
+    /**
+     * 截取文章摘要
+     *
+     * @param value 文章内容
+     * @param len   要截取文字的个数
+     * @return
+     */
+    public String intro(String value, int len) {
+        int pos = value.indexOf("<!--more-->");
+        if (pos != -1) {
+            String html = value.substring(0, pos);
+            return BlogUtil.htmlToText(BlogUtil.mdToHtml(html));
+        } else {
+            String text = BlogUtil.htmlToText(BlogUtil.mdToHtml(value));
+            if (text.length() > len) {
+                return text.substring(0, len);
+            }
+            return text;
+        }
+    }
+
+    /**
+     * 文章标题
+     *
+     * @param contents
+     * @return
+     */
+    public String title(Contents contents) {
+        //site_title
+        return null != contents ? contents.getTitle() : "site_title";
+    }
+
+    /**
+     * 显示文章图标
+     *
+     * @return
+     */
+    public String show_icon(Contents contents) {
+        if (null != contents) {
+            return show_icon(contents.getCid());
+        }
+        return show_icon(1);
+    }
+
+    /**
+     * 显示文章图标
+     *
+     * @param cid
+     * @return
+     */
+    public String show_icon(int cid) {
+        return ICONS[cid % ICONS.length];
+    }
+
+    private final String[] ICONS = {"bg-ico-book", "bg-ico-game", "bg-ico-note", "bg-ico-chat", "bg-ico-code", "bg-ico-image", "bg-ico-web", "bg-ico-link", "bg-ico-design", "bg-ico-lock"};
+
+    /**
+     * 显示文章缩略图，顺序为：文章第一张图 -> 随机获取
+     *
+     * @return
+     */
+    public String show_thumb(Contents contents) {
+        if (null == contents) {
+            return "";
+        }
+        if (!StringUtils.isEmpty(contents.getThumbImg())) {
+            return contents.getThumbImg();
+        }
+        String content = article(contents.getContent());
+        String img = BlogUtil.show_thumb(content);
+        if (!StringUtils.isEmpty(img)) {
+            return img;
+        }
+        int cid = contents.getCid();
+        int size = cid % 20;
+        size = size == 0 ? 1 : size;
+        return "/themes/default/img/rand/" + size + ".jpg";
+    }
+
+    /**
+     * 显示文章内容，转换markdown为html
+     *
+     * @param value
+     * @return
+     */
+    public String article(String value) {
+        if (!StringUtils.isEmpty(value)) {
+            value = value.replace("<!--more-->", "\r\n");
+            return BlogUtil.mdToHtml(value);
+        }
+        return "";
+    }
+
+    /**
+     * 显示分类
+     *
+     * @return
+     */
+    public String show_categories(Contents contents) throws UnsupportedEncodingException {
+        if (null != contents) {
+            return show_categories(contents.getCategories());
+        }
+        return "";
+    }
+
+    /**
+     * 显示分类
+     *
+     * @param categories
+     * @return
+     */
+    public String show_categories(String categories) throws UnsupportedEncodingException {
+        if (!StringUtils.isEmpty(categories)) {
+            String[] arr = categories.split(",");
+            StringBuffer sbuf = new StringBuffer();
+            for (String c : arr) {
+                sbuf.append("<a href=\"/category/" + URLEncoder.encode(c, "UTF-8") + "\">" + c + "</a>");
+            }
+            return sbuf.toString();
+        }
+        return show_categories("默认分类");
+    }
+
     /**
      * 当前文章的上一篇文章链接
      *
@@ -91,6 +235,7 @@ public class SiteUtil {
         if (null == siteService) {
             return null;
         }
+
         return siteService.getContents(Types.RECENT_ARTICLE, limit);
     }
 
@@ -122,7 +267,7 @@ public class SiteUtil {
         if (null != cp) {
             page = cp.intValue();
         }
-        List<Comments> list =  siteService.getComments(contents.getCid(), page, limit);
+        List<Comments> list = siteService.getComments(contents.getCid(), page, limit);
 
         return new PageInfo<>(list);
     }
@@ -140,5 +285,6 @@ public class SiteUtil {
         }
         return "";
     }
+
 
 }

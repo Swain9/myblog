@@ -13,7 +13,6 @@ import java.util.Locale;
 /**
  * Date kit
  *
- * @author biezhi
  * 2017/6/2
  */
 @NoArgsConstructor

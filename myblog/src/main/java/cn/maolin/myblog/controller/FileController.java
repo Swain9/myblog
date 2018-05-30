@@ -2,7 +2,9 @@ package cn.maolin.myblog.controller;
 
 import cn.maolin.myblog.entity.Users;
 import cn.maolin.myblog.service.UserService;
+import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.activation.MimetypesFileTypeMap;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,12 +45,23 @@ public class FileController {
         return "test";
     }
 
+    /**
+     * 加载资源文件，还有一种方式是在WebMvcConfig.java里面配置资源文件路径
+     *
+     * @param year     年
+     * @param month    月
+     * @param filename 文件名
+     * @return 字节码
+     */
     @RequestMapping(method = RequestMethod.GET, value = "/{year}/{month}/{filename:.+}")
     @ResponseBody
     public ResponseEntity<?> getFile(@PathVariable String year, @PathVariable String month, @PathVariable String filename) {
         String path = AttachController.UP_DIR + "/upload/" + year + "/" + month;
         try {
-            return ResponseEntity.ok(resourceLoader.getResource("file:" + Paths.get(path, filename).toString()));
+            Resource resource = resourceLoader.getResource("file:" + Paths.get(path, filename).toString());
+            String contentType = new MimetypesFileTypeMap().getContentType(filename);
+            MediaType mediaType = MediaType.valueOf(contentType);
+            return ResponseEntity.ok().contentType(mediaType).body(resource);
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
