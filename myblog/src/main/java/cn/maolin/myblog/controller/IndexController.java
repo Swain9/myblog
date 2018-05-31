@@ -1,15 +1,15 @@
 package cn.maolin.myblog.controller;
 
-import cn.maolin.myblog.annotation.Login;
 import cn.maolin.myblog.annotation.LoginUser;
 import cn.maolin.myblog.entity.Contents;
 import cn.maolin.myblog.entity.Users;
 import cn.maolin.myblog.model.dto.Types;
+import cn.maolin.myblog.model.vo.Archive;
 import cn.maolin.myblog.service.ContentsService;
+import cn.maolin.myblog.service.SiteService;
 import cn.maolin.myblog.util.BlogConstant;
 import cn.maolin.myblog.util.BlogUtil;
 import com.github.pagehelper.PageInfo;
-import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,11 +26,11 @@ import java.util.Optional;
 @Controller
 public class IndexController {
 
-
     private final ContentsService contentsService;
-
-    public IndexController(ContentsService contentsService) {
+    private final SiteService siteService;
+    public IndexController(ContentsService contentsService, SiteService siteService) {
         this.contentsService = contentsService;
+        this.siteService = siteService;
     }
 
 
@@ -53,7 +53,7 @@ public class IndexController {
      * @param model 是否登陆
      * @param page  数据
      * @param limit 分页
-     * @return
+     * @return themes/default/index
      */
     @GetMapping(value = {"/page/{page}", "/page/{page}.html"})
     public String index(@LoginUser Users user, Model model, @PathVariable int page, @RequestParam(defaultValue = "12") int limit) {
@@ -76,6 +76,11 @@ public class IndexController {
 
     /**
      * 文章页
+     * @param users 用户是否登陆
+     * @param cid 文章id
+     * @param cp conmentPage 评论页
+     * @param model 存储数据
+     * @return themes/default/post
      */
     @GetMapping(value = {"/article/{cid}", "/article/{cid}.html"})
     public String post(@LoginUser Users users, @PathVariable String cid, @RequestParam(defaultValue = "1") int cp, Model model) {
@@ -109,4 +114,16 @@ public class IndexController {
         return BlogUtil.render("post");
     }
 
+    /**
+     * 归档页
+     *
+     * @return
+     */
+    @GetMapping(value = {"/archives", "/archives.html"})
+    public String archives(Model model) {
+        List<Archive> archives = siteService.getArchives();
+        model.addAttribute("archives", archives);
+        model.addAttribute("is_archive", true);
+        return BlogUtil.render("archives");
+    }
 }

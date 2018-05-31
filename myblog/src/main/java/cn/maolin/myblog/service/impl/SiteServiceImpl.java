@@ -7,14 +7,20 @@ import cn.maolin.myblog.entity.Metas;
 import cn.maolin.myblog.mapper.*;
 import cn.maolin.myblog.model.dto.Statistics;
 import cn.maolin.myblog.model.dto.Types;
+import cn.maolin.myblog.model.vo.Archive;
 import cn.maolin.myblog.service.SiteService;
 import cn.maolin.myblog.util.BlogConstant;
+import cn.maolin.myblog.util.DateUtil;
 import cn.maolin.myblog.util.MapCache;
 import com.github.pagehelper.PageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author 张茂林
@@ -225,5 +231,44 @@ public class SiteServiceImpl implements SiteService {
         }
 
         return null;
+    }
+
+    /**
+     * 文章归档
+     *
+     * @return List<Archive>
+     */
+    @Override
+    public List<Archive> getArchives() {
+        List<Archive> archives = contentsMapper.selectArchives();
+        if (null != archives) {
+            return archives.stream()
+                    .map(this::parseArchive)
+                    .collect(Collectors.toList());
+        }
+        return null;
+    }
+
+    /**
+     * 根据日期查询所有的文章列表
+     *
+     * @param archive 归档
+     * @return Archive
+     */
+    private Archive parseArchive(Archive archive) {
+        String date_str = archive.getDate_str();
+        Date sd = DateUtil.toDate(date_str + "01", "yyyy年MM月dd");
+        archive.setDate(sd);
+        int start = DateUtil.toUnix(sd);
+        Calendar calender = Calendar.getInstance();
+        calender.setTime(sd);
+        calender.add(Calendar.MONTH, 1);
+        Date endSd = calender.getTime();
+        int end = DateUtil.toUnix(endSd) - 1;
+
+        List<Contents> contents =  contentsMapper.selectContentsByCreated(start, end);
+
+        archive.setArticles(contents);
+        return archive;
     }
 }

@@ -1,6 +1,7 @@
 package cn.maolin.myblog.mapper;
 
 import cn.maolin.myblog.entity.Contents;
+import cn.maolin.myblog.model.vo.Archive;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -138,4 +139,20 @@ public interface ContentsMapper {
      * @return
      */
     int updateHits(Contents temp);
+
+    /**
+     * 文章归档
+     *
+     * @return
+     */
+    List<Archive> selectArchives();
+
+    /**
+     * 根据时间查找已发布的文章
+     *
+     * @param start 开始时间
+     * @param end 结束时间
+     * @return
+     */
+    List<Contents> selectContentsByCreated(@Param("start") int start, @Param("end") int end);
 }

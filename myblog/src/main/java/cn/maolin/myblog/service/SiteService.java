@@ -5,6 +5,7 @@ import cn.maolin.myblog.entity.Contents;
 import cn.maolin.myblog.entity.Logs;
 import cn.maolin.myblog.entity.Metas;
 import cn.maolin.myblog.model.dto.Statistics;
+import cn.maolin.myblog.model.vo.Archive;
 
 import java.util.List;
 
@@ -45,6 +46,11 @@ public interface SiteService {
      */
     List<Logs> getLogs(int count);
 
+    /**
+     * 清理站点缓存
+     *
+     * @param cStatistics
+     */
     void cleanCache(String cStatistics);
 
     /**
@@ -83,4 +89,12 @@ public interface SiteService {
      * @return List<Metas>
      */
     List<Metas> getMetas(String searchType, String type, int limit);
+
+    /**
+     * 文章归档
+     *
+     * @return List<Archive>
+     */
+    List<Archive> getArchives();
+
 }

@@ -53,6 +53,10 @@ mybatis:
   #在javaconfig文件中配置mapperscan之后依然需要以下配置(不会和普通方式那样去自动寻找)
   mapper-locations: classpath:/mapper/*Mapper.xml
 
+pagehelper:
+  helperDialect: mysql
+
 logging:
   config: classpath:logging-config.xml
+
 

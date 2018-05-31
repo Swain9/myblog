@@ -164,5 +164,13 @@
     <select id="selectPrevContent" resultMap="BaseResultMap">
         SELECT cid,title,slug,thumb_img,created,modified,content,author_id,`type`,`status`,fmt_type,tags,categories,hits,comments_num,allow_comment,allow_see,allow_ping,allow_feed FROM t_contents WHERE `type` = #{type} AND status = #{status} AND created &lt; #{created} ORDER BY created DESC LIMIT 1
     </select>
+    <!--文章归档-->
+    <select id="selectArchives" resultType="cn.maolin.myblog.model.vo.Archive">
+        SELECT COUNT(*) AS `count`,FROM_UNIXTIME(created, '%Y年%m月') AS date_str FROM t_contents WHERE `type` = 'post' AND `status` = 'publish' GROUP BY date_str ORDER BY date_str DESC
+    </select>
+    <!--根据时间查询文章-->
+    <select id="selectContentsByCreated" resultMap="BaseResultMap">
+       SELECT cid,title,slug,thumb_img,created,modified,content,author_id,`type`,`status`,fmt_type,tags,categories,hits,comments_num,allow_comment,allow_see,allow_ping,allow_feed FROM t_contents WHERE `type` = 'post' AND `status` = 'publish' AND created > #{start} AND created &lt; #{end} ORDER BY created DESC
+    </select>
 
 </mapper>

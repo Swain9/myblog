@@ -185,4 +185,17 @@ public class ThymeleafUtil extends AbstractDialect implements IExpressionObjectD
         }
         return str;
     }
+
+    /**
+     * 显示文章创建日期
+     *
+     * @param fmt 格式化日期样式
+     * @return
+     */
+    public String created(Contents contents, String fmt) {
+        if (null != contents) {
+            return BlogUtil.fmtdate(contents.getCreated(), fmt);
+        }
+        return "";
+    }
 }

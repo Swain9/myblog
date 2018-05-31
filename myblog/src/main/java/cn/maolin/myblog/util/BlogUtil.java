@@ -1,5 +1,6 @@
 package cn.maolin.myblog.util;
 
+import cn.maolin.myblog.entity.Users;
 import com.vdurmont.emoji.EmojiParser;
 import org.commonmark.Extension;
 import org.commonmark.ext.gfm.tables.TablesExtension;
@@ -24,6 +25,19 @@ public class BlogUtil {
 
     private static final Pattern SLUG_REGEX = Pattern.compile("^[A-Za-z0-9_-]{5,100}$", Pattern.CASE_INSENSITIVE);
     public static final String THEME = "themes/default";
+
+    /**
+     * 获取登陆用户信息
+     *
+     * @return
+     */
+    public static Users getLoginUser() {
+        Object user = HttpContextUtils.getHttpServletRequest().getSession().getAttribute(BlogConstant.USER_SESSION_KEY);
+        if (user != null) {
+            return (Users) user;
+        }
+        return null;
+    }
 
     /**
      * 判断是否是合法路径
@@ -86,6 +100,7 @@ public class BlogUtil {
         }
         return content;
     }
+
     /**
      * 提取html中的文字
      *
@@ -109,6 +124,7 @@ public class BlogUtil {
     }
 
     private static final Pattern SRC_PATTERN = Pattern.compile("src\\s*=\\s*\'?\"?(.*?)(\'|\"|>|\\s+)");
+
     /**
      * 获取文章第一张图片
      *
@@ -117,10 +133,10 @@ public class BlogUtil {
     public static String show_thumb(String content) {
         content = mdToHtml(content);
         if (content.contains("<img")) {
-            String  img       = "";
-            String  regEx_img = "<img.*src\\s*=\\s*(.*?)[^>]*?>";
-            Pattern p_image   = Pattern.compile(regEx_img, Pattern.CASE_INSENSITIVE);
-            Matcher m_image   = p_image.matcher(content);
+            String img = "";
+            String regEx_img = "<img.*src\\s*=\\s*(.*?)[^>]*?>";
+            Pattern p_image = Pattern.compile(regEx_img, Pattern.CASE_INSENSITIVE);
+            Matcher m_image = p_image.matcher(content);
             if (m_image.find()) {
                 img = img + "," + m_image.group();
                 // //匹配src
@@ -129,6 +145,20 @@ public class BlogUtil {
                     return m.group(1);
                 }
             }
+        }
+        return "";
+    }
+
+    /**
+     * 格式化unix时间戳为日期
+     *
+     * @param unixTime
+     * @param patten
+     * @return
+     */
+    public static String fmtdate(Integer unixTime, String patten) {
+        if (null != unixTime && !StringUtils.isEmpty(patten)) {
+            return DateUtil.toString(unixTime, patten);
         }
         return "";
     }

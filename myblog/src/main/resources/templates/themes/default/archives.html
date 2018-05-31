@@ -1,27 +1,27 @@
-#include('./partial/header.html', {title: '文章归档'})
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:insert="~{themes/default/partial/header :: header('文章归档','文章归档','文章归档')}"></th:block>
 <div class="main-content archive-page clearfix">
     <div class="categorys-item">
-        #for(archive : archives)
-        <div class="categorys-title">${archive.date_str}</div>
+        <th:block th:each="archive : ${archives}">
+        <div class="categorys-title" th:text="${archive.date_str}"></div>
         <div class="post-lists">
             <div class="post-lists-body">
-                #for(article : archive.articles)
-                <div class="post-list-item">
+                <div th:each="article : ${archive.articles}" class="post-list-item">
                     <div class="post-list-item-container">
                         <div class="item-label">
                             <div class="item-title">
-                                <a href="${(permalink())}">${title()}</a>
+                                <a th:href="${@site.permalink(article)}" th:text="${@site.title(article)}"></a>
                             </div>
                             <div class="item-meta clearfix">
-                                <div class="item-meta-date">发布于 ${created('yyyy-MM-dd')}</div>
+                                <div class="item-meta-date" th:text="'发布于 '+${#myutil.created(article,'yyyy-MM-dd')}"></div>
                             </div>
                         </div>
                     </div>
                 </div>
-                #end
             </div>
         </div>
-        #end
+        </th:block>
     </div>
 </div>
-#include('./partial/footer.html')
+<th:block  th:insert="~{themes/default/partial/footer :: footer}"></th:block>
