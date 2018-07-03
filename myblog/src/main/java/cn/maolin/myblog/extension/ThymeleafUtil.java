@@ -130,9 +130,9 @@ public class ThymeleafUtil extends AbstractDialect implements IExpressionObjectD
     public String showCategories(String categories) throws UnsupportedEncodingException {
         if (!StringUtils.isEmpty(categories)) {
             String[] arr = categories.split(",");
-            StringBuffer sbuf = new StringBuffer();
+            StringBuilder sbuf = new StringBuilder();
             for (String c : arr) {
-                sbuf.append("<a href=\"/category/" + URLEncoder.encode(c, "UTF-8") + "\">" + c + "</a>");
+                sbuf.append(" <a href=\"/category/").append(URLEncoder.encode(c, "UTF-8")).append("\">").append(c).append("</a> ");
             }
             return sbuf.toString();
         }

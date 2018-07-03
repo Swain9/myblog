@@ -1,7 +1,5 @@
 package cn.maolin.myblog.util;
 
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -10,6 +8,7 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 
 /**
  * Created by Zml on 2017/2/14.
@@ -125,8 +124,8 @@ public class HashUtil {
      * @return base64字符串
      */
     public static String base64encode(String str) {
-        BASE64Encoder base64 = new BASE64Encoder();
-        return base64.encode(str.getBytes());
+        Base64.Encoder base64 = Base64.getEncoder();
+        return base64.encodeToString(str.getBytes());
     }
 
     /**
@@ -138,8 +137,8 @@ public class HashUtil {
      * @throws UnsupportedEncodingException 异常
      */
     public static String base64encode(String str, String charaset) throws UnsupportedEncodingException {
-        BASE64Encoder base64 = new BASE64Encoder();
-        return base64.encode(str.getBytes(charaset));
+        Base64.Encoder base64 = Base64.getEncoder();
+        return base64.encodeToString(str.getBytes(charaset));
     }
 
     /**
@@ -150,8 +149,8 @@ public class HashUtil {
      * @throws IOException 异常
      */
     public static String base64decode(String str) throws IOException {
-        BASE64Decoder base64 = new BASE64Decoder();
-        byte b[] = base64.decodeBuffer(str);
+        Base64.Decoder base64 = Base64.getDecoder();
+        byte b[] = base64.decode(str);
         return new String(b);//GBK
     }
 
@@ -164,8 +163,8 @@ public class HashUtil {
      * @throws IOException 异常
      */
     public static String base64decode(String str, String charaset) throws IOException {
-        BASE64Decoder base64 = new BASE64Decoder();
-        byte b[] = base64.decodeBuffer(str);
+        Base64.Decoder base64 = Base64.getDecoder();
+        byte b[] = base64.decode(str);
         return new String(b, charaset);
     }
 
