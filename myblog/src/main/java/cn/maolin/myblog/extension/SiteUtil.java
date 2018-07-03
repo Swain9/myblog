@@ -4,14 +4,11 @@ import cn.maolin.myblog.entity.Comments;
 import cn.maolin.myblog.entity.Contents;
 import cn.maolin.myblog.model.dto.Types;
 import cn.maolin.myblog.service.SiteService;
-import cn.maolin.myblog.util.BlogConstant;
 import cn.maolin.myblog.util.BlogUtil;
-import cn.maolin.myblog.util.HttpContextUtils;
 import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.List;

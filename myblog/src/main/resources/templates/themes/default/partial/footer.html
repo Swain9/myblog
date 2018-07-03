@@ -1,4 +1,5 @@
 <html xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="footer">
 <footer id="footer" class="footer bg-white">
     <div class="footer-social">
         <div class="footer-container clearfix">
@@ -39,7 +40,7 @@
     </div>
 </footer>
 
-<th:block th:if="#{is_post}">
+<th:block th:if="${is_post}">
     <div id="directory-content" class="directory-content">
         <div id="directory"></div>
     </div>
@@ -183,5 +184,7 @@
     });
     InstantClick.init('mousedown');
 </script>
+<!--<script th:src="${#myutil.theme_url('/js/md_nav.js')}"></script>-->
 </body>
 </html>
+</th:block>
