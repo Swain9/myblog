@@ -66,6 +66,6 @@
         DELETE FROM t_attach WHERE id=#{id}
     </delete>
     <select id="select" resultMap="BaseResultMap">
-          select id, fname, ftype, fkey, author_id, created from t_attach
+          select id, fname, ftype, fkey, author_id, created from t_attach order by id desc
     </select>
 </mapper>
